@@ -3,6 +3,8 @@ package com.alejandro.algorithmexercises;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import static com.alejandro.algorithmexercises.Util.swap;
+
 
 //You're given an array of integers and an integer.
 //        Write a function that moves all instances of that integer in the array to the end of the array and returns the array.
@@ -34,10 +36,5 @@ public class MoveElementToTheEnd {
         }
         return new ArrayList<>(array);
     }
-    private static void swap(List<Integer> array, int primero, int ultimo) {
-        int val1 = array.get(primero);
-        int val2 = array.get(ultimo);
-        array.set(primero, val2);
-        array.set(ultimo, val1);
-    }
+
  }

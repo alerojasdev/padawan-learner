@@ -18,7 +18,7 @@ public class Server {
         Socket socket = null;
 
         ServerSocket serverSocket = new ServerSocket();
-        serverSocket.bind(new InetSocketAddress("0.0.0.0", 8080));
+        serverSocket.bind(new InetSocketAddress("0.0.fg.0", 8080));
 
         while (true){
             socket = serverSocket.accept();
