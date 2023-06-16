@@ -9,7 +9,18 @@ public class OrderArray {
     public static void main(String[] args){
         int[] arr = new int[]{3,6,10,5,4};
 //        bubbleSort(arr);
-        aleSort(arr);
+        aleSort1(arr);
+    }
+
+    public static void aleSort1(int[] arr){
+        for (int i = 0; i < arr.length-1; i++){
+            for (int k = i+1; k < arr.length; k++){
+                if (arr[i] > arr[k]){
+                    swap(arr, i, k);
+                }
+            }
+        }
+        System.out.println(Arrays.toString(arr));
     }
 
     public static void aleSort(int[] arr) {
