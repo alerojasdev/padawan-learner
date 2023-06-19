@@ -1,3 +1,15 @@
-Hola mundo!
+Updated content:
 
-Que hay bro
+java language
+
+jdbc
+
+maven
+
+hibernate/jpa
+
+spring
+
+spring boot
+
+solved algorithmic exercises
