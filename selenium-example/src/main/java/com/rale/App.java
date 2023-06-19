@@ -2,19 +2,20 @@ package com.rale;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-
-import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.IOException;
+import java.util.List;
 
 
 public class App
 {
-    public static void main( String[] args )
-    {
+    public static void main( String[] args ) throws IOException {
 
         System.setProperty("webdriver.chrome.driver", "C:\\dev\\repos\\padawan-learner\\selenium-example\\src\\main\\java\\drivers\\chromedriver.exe");
 
@@ -35,9 +36,13 @@ public class App
 
         Document doc = Jsoup.parse(pageSource);
 
-        String outPut = doc.text();
+        List<String> lyrics = doc.getElementsByTag("div").eachText();
 
-        System.out.println(outPut);
+        for (String element: lyrics){
+            System.out.println(element);
+            System.out.println();
+            System.out.println("---------------");
+        }
 
         browser.close();
 
