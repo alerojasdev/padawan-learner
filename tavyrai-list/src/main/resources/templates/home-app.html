@@ -10,8 +10,6 @@
 
 <body>
 
-<h2 th:text="${message}">Hello Good Morning!.</h2>
-
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -35,15 +33,15 @@
 
         <p class="h1 m-4">tavyrai-list-web-app</p>
 
-        <a th:href="@{/tavyrai-list/logout}" class="btn btn-primary btn-sm mb-3">
+        <a th:href="@{/logout}" class="btn btn-primary btn-sm mb-3">
             Logout
         </a>
 
-        <a th:href="@{/tavyrai-list/showError}" class="btn btn-primary btn-sm mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <a th:href="@{/showError}" class="btn btn-primary btn-sm mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Show error
         </a>
 
-        <form method="post" th:action="@{/tavyrai-list/home-app}">
+        <form method="post" th:action="@{/home-app}">
 <!--            <button type="submit">Increment</button>-->
             <a href="#" onclick="this.parentNode.submit()" class="btn btn-primary btn-sm mb-3">
                 Click Counter
@@ -55,32 +53,6 @@
     </div>
 
 </div>
-
-<script>
-    // Obtener el elemento del botón y el contador del HTML
-    const incrementButton = document.getElementById('incrementButton');
-    const counterElement = document.getElementById('counter');
-
-    // Obtener el valor del contador del Local Storage (si existe)
-    let counter = localStorage.getItem('counter');
-
-    counter = 0;
-
-    // Si el valor del contador existe en el Local Storage, establecerlo en el contador del HTML
-    if (counter) {
-        counterElement.textContent = counter;
-    }
-
-    // Manejar el evento de clic del botón
-    incrementButton.addEventListener('click', function() {
-        // Incrementar el contador
-        counter++;
-
-        // Actualizar el valor del contador en el HTML y en el Local Storage
-        counterElement.textContent = counter;
-        localStorage.setItem('counter', counter);
-    });
-</script>
 
 </body>
 </html>

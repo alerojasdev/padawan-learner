@@ -6,11 +6,11 @@ import org.springframework.web.context.annotation.SessionScope;
 
 @Controller
 @SessionScope
-@RequestMapping("/tavyrai-list")
+@RequestMapping("/")
 public class ThymeleafNavigation {
     private int clickCount = 0;
 
-    @GetMapping("/login")
+    @GetMapping
     public String login(Model model) {
         clickCount = 0;
         return "login";
