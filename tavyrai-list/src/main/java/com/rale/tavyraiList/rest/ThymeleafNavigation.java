@@ -19,6 +19,7 @@ public class ThymeleafNavigation {
     @GetMapping("/home-app")
     public String home(Model model) {
         model.addAttribute("clickCount", clickCount);
+        model.addAttribute("message", "Nde tavyrai");
         return "home-app";
     }
 

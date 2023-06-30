@@ -15,17 +15,18 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests( auth -> {
-                    auth.requestMatchers("/")
-                            .permitAll()
-                            .anyRequest()
-                            .authenticated();
-                })
-                .oauth2Login(c->{
-                    c.defaultSuccessUrl("/home-app", true);
-                })
-                .logout(withDefaults())
-                .build();
+//        return http.authorizeHttpRequests( auth -> {
+//                    auth.requestMatchers("/")
+//                            .permitAll()
+//                            .anyRequest()
+//                            .authenticated();
+//                })
+//                .oauth2Login(c->{
+//                    c.defaultSuccessUrl("/home-app", true);
+//                })
+//                .logout(withDefaults())
+//                .build();
+//    }
+        return null;
     }
-
 }
