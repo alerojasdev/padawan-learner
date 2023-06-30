@@ -59,6 +59,8 @@ public class HttpClientConnect {
     public static String extractLyricsFromBody(String body){
         String s = body;
         String regex = "</span>\\R</div>\\R+<b>(.*)\\R</div>\\R+<br><br>\\R";
+//        MULTILINE allow regex java to by multiline
+//        .DOTALL allow .* to by multiline
         Pattern p = Pattern.compile(regex,  Pattern.MULTILINE | Pattern.DOTALL   ); //Pattern.DOTALL |
 //                System.out.println("regexmatches?: " + p.matcher(s).find());
         Matcher matcher = p.matcher(body);
