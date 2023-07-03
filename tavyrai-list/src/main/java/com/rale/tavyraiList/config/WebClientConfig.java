@@ -11,38 +11,38 @@ import org.springframework.security.oauth2.client.web.reactive.function.client.S
 import org.springframework.web.reactive.function.client.WebClient;
 
 public class WebClientConfig {
-    @Bean
-    public OAuth2AuthorizedClientManager authorizedClientManager(
-            ClientRegistrationRepository clientRegistrationRepository,
-            OAuth2AuthorizedClientRepository authorizedClientRepository) {
-
-        OAuth2AuthorizedClientProvider authorizedClientProvider =
-                OAuth2AuthorizedClientProviderBuilder.builder()
-                        .authorizationCode()
-                        .refreshToken()
-                        .build();
-        System.out.println("I AM OAUTH2 AUTHORIZED CLIENT MANAGER");
-
-        DefaultOAuth2AuthorizedClientManager authorizedClientManager =
-                new DefaultOAuth2AuthorizedClientManager(
-                        clientRegistrationRepository, authorizedClientRepository);
-
-        authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
-
-        return authorizedClientManager;
-    }
-
-
-    @Bean
-    public WebClient webClient(OAuth2AuthorizedClientManager authorizedClientManager) {
-
-        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2Client =
-                new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
-
-        oauth2Client.setDefaultClientRegistrationId("spotify");
-        System.out.println("I AM WEBCLIENT");
-        return WebClient.builder()
-                .apply(oauth2Client.oauth2Configuration())
-                .build();
-    }
+//    @Bean
+//    public OAuth2AuthorizedClientManager authorizedClientManager(
+//            ClientRegistrationRepository clientRegistrationRepository,
+//            OAuth2AuthorizedClientRepository authorizedClientRepository) {
+//
+//        OAuth2AuthorizedClientProvider authorizedClientProvider =
+//                OAuth2AuthorizedClientProviderBuilder.builder()
+//                        .authorizationCode()
+//                        .refreshToken()
+//                        .build();
+//        System.out.println("I AM OAUTH2 AUTHORIZED CLIENT MANAGER");
+//
+//        DefaultOAuth2AuthorizedClientManager authorizedClientManager =
+//                new DefaultOAuth2AuthorizedClientManager(
+//                        clientRegistrationRepository, authorizedClientRepository);
+//
+//        authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
+//
+//        return authorizedClientManager;
+//    }
+//
+//
+//    @Bean
+//    public WebClient webClient(OAuth2AuthorizedClientManager authorizedClientManager) {
+//
+//        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2Client =
+//                new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
+//
+//        oauth2Client.setDefaultClientRegistrationId("spotify");
+//        System.out.println("I AM WEBCLIENT");
+//        return WebClient.builder()
+//                .apply(oauth2Client.oauth2Configuration())
+//                .build();
+//    }
 }
