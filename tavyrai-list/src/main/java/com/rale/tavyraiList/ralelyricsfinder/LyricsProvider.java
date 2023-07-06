@@ -1,9 +1,4 @@
-package com.rale.tavyraiList.arlyricsfinder;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
+package com.rale.tavyraiList.ralelyricsfinder;
 
 public interface LyricsProvider {
     String fetchLyrics(String songName);

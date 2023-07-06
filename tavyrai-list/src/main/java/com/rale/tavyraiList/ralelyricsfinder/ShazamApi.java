@@ -1,14 +1,16 @@
-package com.rale.tavyraiList.arlyricsfinder;
+package com.rale.tavyraiList.ralelyricsfinder;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.kevinsawicki.http.HttpRequest;
 import lombok.ToString;
+import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+@Component
 public class ShazamApi implements LyricsProvider{
     private static final String SEARCH_KEY_FIRST_PART_URL = "https://www.shazam.com/services/search/v4/en-US/PY/web/search";
     private static final String LYRICS_URL = "https://www.shazam.com/discovery/v5/en-US/PY/web/-/track/";
@@ -30,8 +32,8 @@ public class ShazamApi implements LyricsProvider{
 
     @ToString
     public static class ShazamMetadata {
-        Date releaseDate;
-        String lyrics;
+        public Date releaseDate;
+        public String lyrics;
     }
 
     public ShazamMetadata getMetadata(String songName) {

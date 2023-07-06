@@ -1,10 +1,13 @@
-package com.rale.tavyraiList.arlyricsfinder;
+package com.rale.tavyraiList.ralelyricsfinder;
 
 import com.github.kevinsawicki.http.HttpRequest;
+import org.springframework.stereotype.Component;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class AzLyricsLyricsProvider implements LyricsProvider{
+@Component
+public class AzlyricsApi implements LyricsProvider{
     private static final String GEOURL = "https://www.azlyrics.com/geo.js";
     private static final String SEARCHURL = "https://search.azlyrics.com/search.php";
 
