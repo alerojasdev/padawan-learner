@@ -1,9 +1,11 @@
 package com.rale.tavyraiList.spotifyapi.modelsdto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.ToString;
 
 import java.util.ArrayList;
 
+@ToString
 public class ItemFromPlaylist {
     public Boolean collaborative;
     public String description;

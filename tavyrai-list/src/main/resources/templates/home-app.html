@@ -37,6 +37,19 @@
             Logout
         </a>
 
+        <a th:href="@{/user-playlists}" class="btn btn-primary btn-sm mb-3">
+            ShowUserPlaylist
+        </a>
+        <a th:href="@{/user-musics}" class="btn btn-primary btn-sm mb-3">
+            GetMusicsFromPlaylist
+        </a>
+        <a th:href="@{/create-playlist}" class="btn btn-primary btn-sm mb-3">
+            CreatePlaylist
+        </a>
+        <a th:href="@{/delete-playlist}" class="btn btn-primary btn-sm mb-3">
+            DeletePlaylist
+        </a>
+
         <a th:href="@{/showError}" class="btn btn-primary btn-sm mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Show error
         </a>
