@@ -13,7 +13,9 @@ import org.springframework.web.util.UriBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,8 +45,6 @@ public class SpotifyApi {
         String resourceUri = "/me/playlists";
         String body = webClient
                 .get()
-//                .uri(resourceUri)
-
                 .uri(uf->
                         uf.path(resourceUri)
                                 .queryParam("offset", offset)
@@ -108,45 +108,45 @@ public class SpotifyApi {
         }
     }
 
-    public List<Track> getUserLiked(){
-        List<Track> tracks = new ArrayList<>();
-        boolean existsMoreTracks = true;
-        int offset = 0;
-        int limit = 50;
-        while (existsMoreTracks){
-            List<Track> tracksLikedFromUser = userLikedMusicRequest(offset, limit);
-            tracks.addAll(tracksLikedFromUser);
-            if (tracksLikedFromUser.size()<50){
-                existsMoreTracks = false;
-            }
-            offset = offset + 50;
-        }
-        return tracks;
-    }
+//    public List<Track> getUserLiked(){
+//        List<Track> tracks = new ArrayList<>();
+//        boolean existsMoreTracks = true;
+//        int offset = 0;
+//        int limit = 50;
+//        while (existsMoreTracks){
+//            List<Track> tracksLikedFromUser = userLikedMusicRequest(offset, limit);
+//            tracks.addAll(tracksLikedFromUser);
+//            if (tracksLikedFromUser.size()<50){
+//                existsMoreTracks = false;
+//            }
+//            offset = offset + 50;
+//        }
+//        return tracks;
+//    }
 
-    private List<Track> userLikedMusicRequest(int offSet, int limit){
-        String resourceUri = "/me/tracks";
-        String bodyRequest = webClient
-                .get()
-                .uri(uf->
-                        uf.path(resourceUri)
-                                .queryParam("offset", offSet)
-                                .queryParam("limit", limit)
-                                .build()
-                )
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            RootFromUserLiked rootFromUserLiked = objectMapper.readValue(bodyRequest, RootFromUserLiked.class);
-            List<Track> tracks = new ArrayList<>();
-            rootFromUserLiked.items.forEach((t) -> tracks.add(t.track));
-            return tracks;
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    private List<Track> userLikedMusicRequest(int offSet, int limit){
+//        String resourceUri = "/me/tracks";
+//        String bodyRequest = webClient
+//                .get()
+//                .uri(uf->
+//                        uf.path(resourceUri)
+//                                .queryParam("offset", offSet)
+//                                .queryParam("limit", limit)
+//                                .build()
+//                )
+//                .retrieve()
+//                .bodyToMono(String.class)
+//                .block();
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            RootFromUserLiked rootFromUserLiked = objectMapper.readValue(bodyRequest, RootFromUserLiked.class);
+//            List<Track> tracks = new ArrayList<>();
+//            rootFromUserLiked.items.forEach((t) -> tracks.add(t.track));
+//            return tracks;
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
     public String createPlaylist(String name, String description){
         String resourceUri = "/users/{userId}/playlists";
         String bodyContent = String.format("""
@@ -249,6 +249,43 @@ public class SpotifyApi {
             return id;
         }
         return null;
+    }
+
+    public List<String> getMusicNameAndArtist(List<String> musicsId){
+        List<String> nameAndArtist = new ArrayList<>();
+        int offset = 0;
+        int limit = 50;
+        for (String idList : musicsId){
+            nameAndArtist.add(requestAllUserMusicsNameAndArtist(idList, offset, limit).toString());
+        }
+        return nameAndArtist;
+    }
+
+    private List<String> requestAllUserMusicsNameAndArtist(String musicId, int offset, int limit){
+        String resource = "/tracks/{musicId}";
+        String responseBody = webClient
+                .get()
+                .uri(uf-> uf.path(resource)
+                        .queryParam("offset", offset)
+                        .queryParam("limit", limit)
+                        .build(musicId))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Track responseContainerInTrackObject = objectMapper.readValue(responseBody, Track.class);
+            List<String> trackProof = new ArrayList<>();
+            Map<String, String> track = new HashMap<>();
+            responseContainerInTrackObject.artists.forEach((t) -> track.put(responseContainerInTrackObject.name, t.name));
+            trackProof.add(track.toString());
+            return trackProof;
+        } catch (JsonMappingException e) {
+            throw new RuntimeException(e);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 

@@ -16,17 +16,22 @@ public class ShazamApi implements LyricsProvider{
     private static final String LYRICS_URL = "https://www.shazam.com/discovery/v5/en-US/PY/web/-/track/";
 
 
-    public static void main(String[] args) {
-
-        LyricsProvider lp = new ShazamApi();
-        System.out.println(lp.fetchLyrics("iron man"));
-
-        ShazamApi sa = new ShazamApi();
-        System.out.println(sa.getMetadata("caraluna"));
-    }
+//    public static void main(String[] args) {
+//
+//        LyricsProvider lp = new ShazamApi();
+//        System.out.println(lp.fetchLyrics("iron man"));
+//
+//        ShazamApi sa = new ShazamApi();
+//        System.out.println(sa.getMetadata("caraluna"));
+//    }
 
     @Override
     public String fetchLyrics(String songName) {
+
+       if (getMetadata(songName).lyrics == null){
+           return null;
+        }
+
         return getMetadata(songName).lyrics;
     }
 
@@ -45,7 +50,9 @@ public class ShazamApi implements LyricsProvider{
                 "video", "v3")
                 .body();
 
-        RawMetadataDTO responseLyrics = null;
+
+
+        RawMetadataDTO responseLyrics = new RawMetadataDTO();
         try {
             ObjectMapper objMap = new ObjectMapper();
             objMap.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -59,17 +66,19 @@ public class ShazamApi implements LyricsProvider{
     }
 
     private ShazamMetadata extractRelevantData(RawMetadataDTO responseLyrics) {
-        String releasedate = responseLyrics.releasedate;
-        ArrayList<String> lyrics = responseLyrics.sections.get(1).text;
-        ShazamMetadata insert = new ShazamMetadata();
-        insert.lyrics = String.join(" ", lyrics);
+
         try {
+            String releasedate = responseLyrics.releasedate;
+            ArrayList<String> lyrics = responseLyrics.sections.get(1).text;
+            ShazamMetadata insert = new ShazamMetadata();
+            insert.lyrics = String.join(" ", lyrics);
             insert.releaseDate = new SimpleDateFormat("dd-MM-yyyy").parse(releasedate);
+            return insert;
         } catch( Exception e) {
             e.printStackTrace();
         }
 
-        return insert;
+        return null;
     }
 
     private static int getMusicId(String songName)  {
