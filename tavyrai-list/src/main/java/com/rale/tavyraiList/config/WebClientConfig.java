@@ -2,6 +2,8 @@ package com.rale.tavyraiList.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
@@ -13,6 +15,20 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class WebClientConfig {
+
+//    @Bean
+//    public TaskExecutor threadPoolTaskExecutor() {
+//
+//        ThreadPoolTaskExecutor threadPoolTaskExecutor =
+//                new ThreadPoolTaskExecutor();
+//        threadPoolTaskExecutor.setCorePoolSize(7);
+//        threadPoolTaskExecutor.setMaxPoolSize(7);
+//        //...
+//        threadPoolTaskExecutor.initialize();
+//
+//        return threadPoolTaskExecutor;
+//    }
+
     @Bean
     public OAuth2AuthorizedClientManager authorizedClientManager(
             ClientRegistrationRepository clientRegistrationRepository,

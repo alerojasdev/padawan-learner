@@ -1,7 +1,6 @@
-package com.rale.tavyraiList.spotifyapi;
+package com.rale.tavyraiList.old;
 
 import com.rale.tavyraiList.ralelanguagedetector.TextAnalysisApi;
-import com.rale.tavyraiList.ralelyricsfinder.AzlyricsApi;
 import com.rale.tavyraiList.ralelyricsfinder.ShazamApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,6 +33,10 @@ public class GetLanguageAndRelease {
         List<String> key = usersMusics.getMusicsIdsFromUser();
 
         for (String songName : musicsBunchNames){
+
+            if (shazamApi.fetchLyrics(songName) == null){
+                continue;
+            }
 
             System.out.println("******************");
             //getting the song lyrics

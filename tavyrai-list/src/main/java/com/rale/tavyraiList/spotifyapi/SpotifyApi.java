@@ -219,6 +219,8 @@ public class SpotifyApi {
                 .block();
     }
     public void deletePlaylist(String playlistId){
+        System.out.println("Borrando playlistId: "+ playlistId);
+
         String resourceUri = "/playlists/{playlistId}/followers";
         String bodyContent = webClient
                 .delete()

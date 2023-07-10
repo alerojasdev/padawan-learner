@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 @Component
@@ -28,10 +29,6 @@ public class ShazamApi implements LyricsProvider{
     @Override
     public String fetchLyrics(String songName) {
 
-       if (getMetadata(songName).lyrics == null){
-           return null;
-        }
-
         return getMetadata(songName).lyrics;
     }
 
@@ -50,8 +47,6 @@ public class ShazamApi implements LyricsProvider{
                 "video", "v3")
                 .body();
 
-
-
         RawMetadataDTO responseLyrics = new RawMetadataDTO();
         try {
             ObjectMapper objMap = new ObjectMapper();
@@ -60,6 +55,8 @@ public class ShazamApi implements LyricsProvider{
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
 
         ShazamMetadata sm = extractRelevantData(responseLyrics);
         return sm;
@@ -71,8 +68,12 @@ public class ShazamApi implements LyricsProvider{
             String releasedate = responseLyrics.releasedate;
             ArrayList<String> lyrics = responseLyrics.sections.get(1).text;
             ShazamMetadata insert = new ShazamMetadata();
-            insert.lyrics = String.join(" ", lyrics);
-            insert.releaseDate = new SimpleDateFormat("dd-MM-yyyy").parse(releasedate);
+            if (lyrics != null) {
+                insert.lyrics = String.join(" ", lyrics);
+            }
+            if (releasedate != null) {
+                insert.releaseDate = new SimpleDateFormat("dd-MM-yyyy").parse(releasedate);
+            }
             return insert;
         } catch( Exception e) {
             e.printStackTrace();

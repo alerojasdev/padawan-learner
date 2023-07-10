@@ -1,41 +1,26 @@
-package com.rale.tavyraiList.spotifyapi;
+package com.rale.tavyraiList.old;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.rale.tavyraiList.spotifyapi.modelsdto.Track;
+import com.rale.tavyraiList.ralelyricsfinder.ShazamApi;
+import com.rale.tavyraiList.spotifyapi.SpotifyApi;
+import com.rale.tavyraiList.spotifyapi.modelsdto.ItemFromPlaylist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+
 
 @Component
 public class UsersMusics {
     @Autowired
     SpotifyApi spotifyApi;
 
-
     private List<String> getPlaylistIdFromUser(){
 
-        String text = spotifyApi.getUserPlayList().toString();
-
-        List<String> idList = Arrays.stream(text.split("\\), ItemFromPlaylist\\("))
-                .filter(item -> item.contains("id="))
-                .map(item -> item.split("id=")[1].split(",")[0])
-                .collect(Collectors.toList());
-
-        return idList;
+        List<ItemFromPlaylist> userPlayList = spotifyApi.getUserPlayList();
+        List<String> ids = userPlayList.stream().map(i->i.id).toList();
+        return ids;
     }
 
     public List<String> getMusicsIdsFromUser(){
