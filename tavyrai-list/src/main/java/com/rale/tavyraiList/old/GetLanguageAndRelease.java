@@ -59,7 +59,7 @@ public class GetLanguageAndRelease {
             }
 
             //store each song Release Date result in the map replaceValueForReleaseDate
-            Date releaseDate = shazamApi.getMetadata(songName).releaseDate;
+//            Date releaseDate = shazamApi.getMetadata(songName).releaseDate;
 
             for (Map.Entry<String, String> entry : replaceValueForReleaseDate.entrySet()){
                 if (songName.equals(entry.getValue())){

@@ -12,10 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -108,45 +105,45 @@ public class SpotifyApi {
         }
     }
 
-//    public List<Track> getUserLiked(){
-//        List<Track> tracks = new ArrayList<>();
-//        boolean existsMoreTracks = true;
-//        int offset = 0;
-//        int limit = 50;
-//        while (existsMoreTracks){
-//            List<Track> tracksLikedFromUser = userLikedMusicRequest(offset, limit);
-//            tracks.addAll(tracksLikedFromUser);
-//            if (tracksLikedFromUser.size()<50){
-//                existsMoreTracks = false;
-//            }
-//            offset = offset + 50;
-//        }
-//        return tracks;
-//    }
+    public List<Track> getUserLiked(){
+        List<Track> tracks = new ArrayList<>();
+        boolean existsMoreTracks = true;
+        int offset = 0;
+        int limit = 50;
+        while (existsMoreTracks){
+            List<Track> tracksLikedFromUser = userLikedMusicRequest(offset, limit);
+            tracks.addAll(tracksLikedFromUser);
+            if (tracksLikedFromUser.size()<50){
+                existsMoreTracks = false;
+            }
+            offset = offset + 50;
+        }
+        return tracks;
+    }
 
-//    private List<Track> userLikedMusicRequest(int offSet, int limit){
-//        String resourceUri = "/me/tracks";
-//        String bodyRequest = webClient
-//                .get()
-//                .uri(uf->
-//                        uf.path(resourceUri)
-//                                .queryParam("offset", offSet)
-//                                .queryParam("limit", limit)
-//                                .build()
-//                )
-//                .retrieve()
-//                .bodyToMono(String.class)
-//                .block();
-//        try {
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            RootFromUserLiked rootFromUserLiked = objectMapper.readValue(bodyRequest, RootFromUserLiked.class);
-//            List<Track> tracks = new ArrayList<>();
-//            rootFromUserLiked.items.forEach((t) -> tracks.add(t.track));
-//            return tracks;
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    private List<Track> userLikedMusicRequest(int offSet, int limit){
+        String resourceUri = "/me/tracks";
+        String bodyRequest = webClient
+                .get()
+                .uri(uf->
+                        uf.path(resourceUri)
+                                .queryParam("offset", offSet)
+                                .queryParam("limit", limit)
+                                .build()
+                )
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            RootFromUserLiked rootFromUserLiked = objectMapper.readValue(bodyRequest, RootFromUserLiked.class);
+            List<Track> tracks = new ArrayList<>();
+            rootFromUserLiked.items.forEach((t) -> tracks.add(t.track));
+            return tracks;
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public String createPlaylist(String name, String description){
         String resourceUri = "/users/{userId}/playlists";
         String bodyContent = String.format("""
@@ -183,8 +180,12 @@ public class SpotifyApi {
         return null;
     }
     public void insertMusic(String playlistId, List<String> tracksUri){
+
         insertMusicInternal(playlistId, tracksUri);
     }
+
+
+
     private void insertMusicInternal(String playlistID, List<String> tracksUri){
         String resourceUri = "/playlists/{playlistId}/tracks";
         StringBuilder tracksUriToSend = new StringBuilder();
@@ -218,6 +219,7 @@ public class SpotifyApi {
                 .bodyToMono(String.class)
                 .block();
     }
+
     public void deletePlaylist(String playlistId){
         System.out.println("Borrando playlistId: "+ playlistId);
 
@@ -288,6 +290,11 @@ public class SpotifyApi {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void insertMusicIntoNewPlaylist(String playlistName, String playlistDesc, List<String> songIds) {
+        String id = createPlaylist(playlistName, playlistDesc);
+        insertMusic(id, songIds);
     }
 }
 

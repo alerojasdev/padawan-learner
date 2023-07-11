@@ -16,10 +16,8 @@ public class SpotifyService {
     SpotifyApi spotifyApi;
     @Autowired
     UsersMusics usersMusics;
-
     @Autowired
     TaskExecutor te;
-
     @Autowired
     OrganizeAndSynchronize oas;
     @GetMapping(value = "/user-playlists")
@@ -36,8 +34,8 @@ public class SpotifyService {
     public String createPlaylist() {
         return spotifyApi.createPlaylist("new playlist_tavyrailist", "usersMusics lofi");
     }
-    @GetMapping(value = "/delete-playlist")
-    public void deletePlaylist() {
-        spotifyApi.deletePlaylist("4pX7OzJRG18SVFloqILHDZ");
-    }
+//    @GetMapping(value = "/delete-playlist")
+//    public void deletePlaylist() {
+//        spotifyApi.deletePlaylist("4pX7OzJRG18SVFloqILHDZ");
+//    }
 }

@@ -1,15 +1,15 @@
 package com.rale.tavyraiList.ralelyricsfinder;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.kevinsawicki.http.HttpRequest;
 import lombok.ToString;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 
 @Component
 public class ShazamApi implements LyricsProvider{
@@ -34,55 +34,48 @@ public class ShazamApi implements LyricsProvider{
 
     @ToString
     public static class ShazamMetadata {
-        public Date releaseDate;
+        public int releaseDate;
         public String lyrics;
+
+        public int getReleaseDate() {
+            return releaseDate;
+        }
     }
 
     public ShazamMetadata getMetadata(String songName) {
-
-        int key = getMusicId(songName);
-
-        String body = HttpRequest.get(LYRICS_URL + key, true,
-                "shazamapiversion", "v3",
-                "video", "v3")
-                .body();
-
-        RawMetadataDTO responseLyrics = new RawMetadataDTO();
         try {
+            Integer key = getMusicId(songName);
+
+            String body = HttpRequest.get(LYRICS_URL + key, true,
+                    "shazamapiversion", "v3",
+                    "video", "v3")
+                    .body();
+
+            RawMetadataDTO responseLyrics;
+
             ObjectMapper objMap = new ObjectMapper();
             objMap.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             responseLyrics = objMap.readValue(body, RawMetadataDTO.class);
+            ShazamMetadata sm = extractRelevantData(responseLyrics);
+            return sm;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Problema obteniendo metadatos de shazam para: "+ songName);
         }
-
-
-
-        ShazamMetadata sm = extractRelevantData(responseLyrics);
-        return sm;
-    }
-
-    private ShazamMetadata extractRelevantData(RawMetadataDTO responseLyrics) {
-
-        try {
-            String releasedate = responseLyrics.releasedate;
-            ArrayList<String> lyrics = responseLyrics.sections.get(1).text;
-            ShazamMetadata insert = new ShazamMetadata();
-            if (lyrics != null) {
-                insert.lyrics = String.join(" ", lyrics);
-            }
-            if (releasedate != null) {
-                insert.releaseDate = new SimpleDateFormat("dd-MM-yyyy").parse(releasedate);
-            }
-            return insert;
-        } catch( Exception e) {
-            e.printStackTrace();
-        }
-
         return null;
     }
 
-    private static int getMusicId(String songName)  {
+
+    private ShazamMetadata extractRelevantData(RawMetadataDTO responseLyrics) throws ParseException {
+
+        String releasedate = responseLyrics.releasedate;
+        ArrayList<String> lyrics = responseLyrics.sections.get(1).text;
+        ShazamMetadata insert = new ShazamMetadata();
+        insert.lyrics = String.join(" ", lyrics);
+        insert.releaseDate = new SimpleDateFormat("dd-MM-yyyy").parse(releasedate).getYear() + 1900;
+        return insert;
+    }
+
+    private static Integer getMusicId(String songName) throws JsonProcessingException {
         HttpRequest keySearchResponse = HttpRequest.get(SEARCH_KEY_FIRST_PART_URL, true,
                 "term", songName,
                 "numResults", "1",
@@ -93,18 +86,11 @@ public class ShazamApi implements LyricsProvider{
 
         String responseContentUrl = keySearchResponse.body();
 
-        Integer id = null;
-        try {
-            ObjectMapper om = new ObjectMapper();
-            om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        ObjectMapper om = new ObjectMapper();
+        om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-            SearchResultsDTO responseKey = om.readValue(responseContentUrl, SearchResultsDTO.class);
-            id = Integer.parseInt(responseKey.tracks.hits.get(0).track.key);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return id;
+        SearchResultsDTO responseKey = om.readValue(responseContentUrl, SearchResultsDTO.class);
+        return Integer.parseInt(responseKey.tracks.hits.get(0).track.key);
     }
 
     private static class SearchResultsDTO {
