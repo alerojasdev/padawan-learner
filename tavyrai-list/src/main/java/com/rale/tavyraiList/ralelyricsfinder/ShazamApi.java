@@ -64,7 +64,6 @@ public class ShazamApi implements LyricsProvider{
         return null;
     }
 
-
     private ShazamMetadata extractRelevantData(RawMetadataDTO responseLyrics) throws ParseException {
 
         String releasedate = responseLyrics.releasedate;
