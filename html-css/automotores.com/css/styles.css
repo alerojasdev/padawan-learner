@@ -1,0 +1,29 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+#header{
+    background-image: url("img/sdf.jpg");
+    height: 85vh;
+    background-size: cover;
+    background-position: center;
+}
+#brand{
+    width: 60px;
+    height: 75px;
+}
+.hover :hover{
+    font-weight: 600;
+    border-bottom: 2px solid white;
+    margin-bottom: -1px;
+}
+.bgc2section{
+    background-color: rgb(4, 10, 41);
+}
+footer{
+    width: 100%;
+}
+.iconos-info{
+    color: lightgreen;
+    text-decoration: none;
+}

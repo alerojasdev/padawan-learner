@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar" id="navbar">
+            <header class="topic" id="topic">JS EcmaScript Documentation</header>
+                <a class="nav-link" id="nav-link" href="#Introduction">Introduction</a>
+                <a class="nav-link" id="nav-link" href="#Grammar_and_Types">Grammar and Types</a>
+                <a class="nav-link" id="nav-link" href="#Loops_and_Iterations">Loops and Iterations</a>
+                <a class="nav-link" id="nav-link" href="#Calling_Functions">Calling Functions</a>
+                <a class="nav-link" id="nav-link" href="#Objects">Objects</a>
+                <a class="nav-link" id="nav-link" href="#Modules">Modules</a>
+                <a class="nav-link" id="nav-link" href="#References" >References</a>
+                <div class="line-navbar"></div>
+        </nav>
+    </header>
+    <main id="main-doc">
+        <section class="main-section" id="Introduction">
+            <header id="Introduction"><h2>Introduction</h2></header>
+            <p>JavaScript is standardized at Ecma International — the European association for standardizing information and communication systems (ECMA was formerly an acronym for the European Computer Manufacturers Association) to deliver a standardized, international programming language based on JavaScript. This standardized version of JavaScript, called ECMAScript, behaves the same way in all applications that support the standard. Companies can use the open standard language to develop their implementation of JavaScript. The ECMAScript standard is documented in the ECMA-262 specification. See New in JavaScript to learn more about different versions of JavaScript and ECMAScript specification editions.</p>
+            <p>The ECMA-262 standard is also approved by the ISO (International Organization for Standardization) as ISO-16262. You can also find the specification on the Ecma International website. The ECMAScript specification does not describe the Document Object Model (DOM), which is standardized by the World Wide Web Consortium (W3C) and/or WHATWG (Web Hypertext Application Technology Working Group). The DOM defines the way in which HTML document objects are exposed to your script. To get a better idea about the different technologies that are used when programming with JavaScript, consult the article JavaScript technologies overview.</p>
+        </section>
+        <section class="main-section" id="Grammar_and_Types">
+            <header id="Grammar_and_Types"><h2>Grammar and Types</h2></header>
+            <p>When you declare a variable outside of any function, it is called a global variable, because it is available to any other code in the current document. When you declare a variable within a function, it is called a local variable, because it is available only within that function.</p>
+            <p>JavaScript before ECMAScript 2015 does not have block statement scope. Rather, a variable declared within a block is local to the function (or global scope) that the block resides within.</p>
+            <p>For example, the following code will log 5, because the scope of x is the global context (or the function context if the code is part of a function). The scope of x is not limited to the immediate if statement block.</p>
+            <hr><code>if (true) {<br>
+                var x = 5;<br>
+              }<br>
+              console.log(x);  // x is 5</code><hr>
+        </section>
+        <section class="main-section" id="Loops_and_Iterations">
+            <header id="Loops_and_Iterations"><h2>Loops and Iterations</h2></header>
+            <p>A for loop repeats until a specified condition evaluates to false. The JavaScript for loop is similar to the Java and C for loop.</p>
+            <p>A for statement looks as follows:</p>
+            <hr><code>
+                for ([initialExpression]; [conditionExpression]; [incrementExpression])<br>
+  statement
+            </code><hr>
+            <p>When a for loop executes, the following occurs:</p>
+            <ol type="1">
+                <li>The initializing expression initialExpression, if any, is executed. This expression usually initializes one or more loop counters, but the syntax allows an expression of any degree of complexity. This expression can also declare variables.</li>
+                <li>The conditionExpression expression is evaluated. If the value of conditionExpression is true, the loop statements execute. If the value of condition is false, the for loop terminates. (If the condition expression is omitted entirely, the condition is assumed to be true.)</li>
+                <li>The statement executes. To execute multiple statements, use a block statement ({ ... }) to group those statements.</li>
+                <li>If present, the update expression incrementExpression is executed.</li>
+                <li>Control returns to Step 2.</li>
+                <li>Whatever</li>
+            </ol>
+            <p>In the example below, the function contains a for statement that counts the number of selected options in a scrolling list (a <select> element that allows multiple selections). The for statement declares the variable i and initializes it to 0. It checks that i is less than the number of options in the <select> element, performs the succeeding if statement, and increments i by after each pass through the loop.</p>
+                <hr><code>
+                                        function howMany(selectObject) {<br>
+                                            let numberSelected = 0;<br>
+                                            for (let i = 0; i < selectObject.options.length; i++) {<br>
+                                            if (selectObject.options[i].selected) {<br>
+                                                numberSelected++;<br>
+                                            }<br>
+                                            }<br>
+                                            return numberSelected;<br>
+                                        }<br><br>
+                                        let btn = document.getElementById('btn');<br>
+                                        btn.addEventListener('click', function() {<br>
+                                            alert('Number of options selected: ' + howMany(document.selectForm.musicTypes));<br>
+                                        });
+</code><hr><br>
+        </section>
+        <section class="main-section" id="Calling_Functions">
+            <header id="Calling_Functions"><h2>Calling Functions</h2></header>
+            <p>Defining a function does not execute it. Defining it names the function and specifies what to do when the function is called.</p>
+            <p> <b> Calling </b>the function actually performs the specified actions with the indicated parameters. For example, if you define the function square, you could call it as follows:</p>
+            <hr><code>square(5);</code><hr><br>
+            <p>The preceding statement calls the function with an argument of 5. The function executes its statements and returns the value 25.</p>
+            <p>Functions must be in scope when they are called, but the function declaration can be hoisted (appear below the call in the code), as in this example:</p>
+            <hr><code>console.log(square(5));
+                /* ... */
+                function square(n) { return n * n }</code><hr><br>
+                <p>The scope of a function is the function in which it is declared (or the entire program, if it is declared at the top level).</p>
+                <p>Note: This works only when defining the function using the above syntax (i.e. function funcName(){}). The code below will not work.
+                    This means that function hoisting only works with function declarations—not with function expressions.</p>
+                    <hr><code>console.log(square)    // square is hoisted with an initial value undefined. <br>
+                        console.log(square(5)) // Uncaught TypeError: square is not a function <br>
+                        const square = function(n) { <br>
+                          return n * n; <br>
+                        }</code><hr>
+                        <p>The arguments of a function are not limited to strings and numbers. You can pass whole objects to a function. The showProps() function (defined in Working with objects) is an example of a function that takes an object as an argument.</p>
+                        <p>A function can call itself. For example, here is a function that computes factorials recursively:</p>
+                        <hr><code>function factorial(n) { <br>
+                            if ((n === 0) || (n === 1)) <br>
+                              return 1; <br>
+                            else <br>
+                              return (n * factorial(n - 1)); <br>
+                          }</code><hr>
+                          <p>You could then compute the factorials of 1 through 5 as follows:</p>
+                          <hr><code>var a, b, c, d, e; <br>
+                            a = factorial(1); // a gets the value 1<br>
+                            b = factorial(2); // b gets the value 2<br>
+                            c = factorial(3); // c gets the value 6<br>
+                            d = factorial(4); // d gets the value 24<br>
+                            e = factorial(5); // e gets the value 120</code> <hr>
+                            <p>There are other ways to call functions. There are often cases where a function needs to be called dynamically, or the number of arguments to a function vary, or in which the context of the function call needs to be set to a specific object determined at runtime.</p>
+                            <p>It turns out that functions are themselves objects—and in turn, these objects have methods. (See the Function object.) One of these, the apply() method, can be used to achieve this goal.</p>
+        </section>
+        <section class="main-section" id="Objects">
+            <header id="Objects"><h2>Objects</h2></header>
+            <p>JavaScript has a number of predefined objects. In addition, you can create your own objects. You can create an object using an object initializer. Alternatively, you can first create a constructor function and then instantiate an object invoking that function in conjunction with the new operator.</p>
+            <p>Using object initializers: In addition to creating objects using a constructor function, you can create objects using an object initializer. Using object initializers is sometimes referred to as creating objects with literal notation. "Object initializer" is consistent with the terminology used by C++.</p>
+            <p>The syntax for an object using an object initializer is:</p><hr>
+            <code>var obj = { property_1:   value_1,   // property_# may be an identifier... <br>
+                2:            value_2,   // or a number... <br>
+                // ..., <br>
+                'property n': value_n }; // or a string</code><hr> <br>
+                <p>Where obj is the name of the new object, each property_i is an identifier (either a name, a number, or a string literal), and each value_i is an expression whose value is assigned to the property_i. The obj and assignment is optional; if you do not need to refer to this object elsewhere, you do not need to assign it to a variable. (Note that you may need to wrap the object literal in parentheses if the object appears where a statement is expected, so as not to have the literal be confused with a block statement.)</p>
+                <p>Object initializers are expressions, and each object initializer results in a new object being created whenever the statement in which it appears is executed. Identical object initializers create distinct objects that will not compare to each other as equal. Objects are created as if a call to new Object() were made; that is, objects made from object literal expressions are instances of Object.</p>
+                <p>The following statement creates an object and assigns it to the variable x if and only if the expression cond is true:</p>
+                <hr><code>if (cond) var x = {greeting: 'hi there'};</code><hr><br>
+                <p>The following example creates myHonda with three properties. Note that the engine property is also an object with its own properties.</p>
+                <hr><code>var myHonda = {color: 'red', wheels: 4, engine: {cylinders: 4, size: 2.2}};</code><hr><br>
+                <p>You can also use object initializers to create arrays. See array literals.</p>
+        </section>
+        <section class="main-section" id="Modules">
+            <header id="Modules"><h2>Modules</h2></header>
+            <p>The first thing you do to get access to module features is export them. This is done using the export statement.</p>
+            <p>The easiest way to use it is to place it in front of any items you want exported out of the module, for example:</p>
+            <hr><code>export const name = 'square'; <br><br>
+                export function draw(ctx, length, x, y, color) {<br>
+                  ctx.fillStyle = color;<br>
+                  ctx.fillRect(x, y, length, length);<br><br>
+                  return {<br>
+                    length: length,<br>
+                    x: x,<br>
+                    y: y,<br>
+                    color: color<br>
+                  };<br>
+                }</code><hr>
+                <p>You can export functions, var, let, const, and — as we'll see later — classes. They need to be top-level items; you can't use export inside a function, for example.</p>
+                <p>A more convenient way of exporting all the items you want to export is to use a single export statement at the end of your module file, followed by a comma-separated list of the features you want to export wrapped in curly braces. For example:</p>
+                <hr><code>export { name, draw, reportArea, reportPerimeter };</code><hr>
+        </section>
+        
+        <section class="main-section" id="References">
+            <header id="References"><h2>References</h2></header>
+            <ul>
+                <li>All the documentation in this page is taken from MDN</li>
+            </ul>
+        </section>
+
+
+    </main>
+</body>
+</html>
