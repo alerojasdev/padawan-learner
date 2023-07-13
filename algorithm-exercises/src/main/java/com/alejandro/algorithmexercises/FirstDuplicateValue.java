@@ -16,7 +16,7 @@ import java.util.Set;
 public class FirstDuplicateValue {
 
     public static void main(String[] args){
-        int[] arr = new int[]{9,1,5,2,3,3,4};
+        int[] arr = new int[]{9,2,1,5,2,3,3,4};
 
         System.out.println(firstDuplicateValue(arr));
         System.out.println(firstDuplicateValue1(arr));

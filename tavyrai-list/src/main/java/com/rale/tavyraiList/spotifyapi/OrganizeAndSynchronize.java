@@ -36,9 +36,6 @@ public class OrganizeAndSynchronize {
 
         fillInLanguageAndReleaseDates(musicsFromSpotifyPlaylist);
 
-        System.out.println(groupByLangWithCount(musicsFromSpotifyPlaylist));
-
-
         // encontrar idiomas que tienen mas de 20 musicas en ese idioma
 
 //        System.out.println("5. separar las musicas por lenguajes y ordenarlos en playslist");
@@ -91,25 +88,31 @@ public class OrganizeAndSynchronize {
     }
 
     public static void main(String[] args) {
-        List<SpotifyMusic> songs = new ArrayList<>();
 
-        songs.add(new SpotifyMusic("es"));
-        songs.add(new SpotifyMusic("es"));
-        songs.add(new SpotifyMusic("es"));
-        songs.add(new SpotifyMusic("es"));
-        songs.add(new SpotifyMusic("en"));
-        songs.add(new SpotifyMusic("en"));
-        songs.add(new SpotifyMusic("en"));
-        songs.add(new SpotifyMusic("de"));
-        songs.add(new SpotifyMusic("fr"));
-        songs.add(new SpotifyMusic("pr"));
+//        OrganizeAndSynchronize organizeAndSynchronize = new OrganizeAndSynchronize();
+//
+//        List<SpotifyMusic> musicsFromSpotifyPlaylist = new ArrayList<>();
+//
+//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("es"));
+//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("es"));
+//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("es"));
+//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("es"));
+//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("en"));
+//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("en"));
+//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("en"));
+//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("de"));
+//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("fr"));
+//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("pr"));
+//
+//        List<List<String>> groupped = organizeAndSynchronize.groupByLangWithCount(musicsFromSpotifyPlaylist, 2);
+//
+//        for (List<String> a : groupped){
+//            System.out.println(a.toString());
+//        }
 
-        Map<String, Integer> groupped = new OrganizeAndSynchronize().groupByLangWithCount(songs);
-        groupped.entrySet().stream()
-                .forEach(e->System.out.println("idioma: "+ e.getKey()+", candidad: "+ e.getValue()));
     }
 
-    private Map<String, Integer> groupByLangWithCount(List<SpotifyMusic> musicsFromSpotifyPlaylist, int threshold) {
+    private List<List<String>> groupByLangWithCount(List<SpotifyMusic> musicsFromSpotifyPlaylist, int threshold) {
 
         // todo
         // crear las playlist segun idioma y release date con sortSongs()
@@ -123,14 +126,26 @@ public class OrganizeAndSynchronize {
             languageCountMap.put(language, languageCountMap.getOrDefault(language, 0) + 1);
         }
 
-        List<List<String>> playlistUrisByLan = new ArrayList<>();
-        for (SpotifyMusic spotifyMusic : musicsFromSpotifyPlaylist){
-            if (languageCountMap.get(spotifyMusic.language) <= threshold){
-                playlistUrisByLan.add(List.of(spotifyMusic.spotifyMusicUri));
+        List<List<String>> result = new ArrayList<>();
+        List<String> currentList = new ArrayList<>();
+
+        // Create separate lists for each language that appears equal to or more than the given number
+        for (SpotifyMusic music : musicsFromSpotifyPlaylist) {
+            String language = music.language;
+            if (languageCountMap.get(language) >= threshold) {
+                currentList.add(music.spotifyMusicUri);
+            } else {
+                if (!currentList.isEmpty()) {
+                    result.add(currentList);
+                    currentList = new ArrayList<>();
+                }
             }
         }
 
-        return languageCountMap;
+        if (!currentList.isEmpty()) {
+            result.add(currentList);
+        }
+        return result;
     }
 
     private void fillInLanguageAndReleaseDates(List<SpotifyMusic> musicsFromSpotifyPlaylist) {
