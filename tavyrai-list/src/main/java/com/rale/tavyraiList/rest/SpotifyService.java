@@ -26,7 +26,7 @@ public class SpotifyService {
     }
     @GetMapping(value = "/ord-sinc")
     public String getUserMusics() {
-       oas.orgAndSync();
+        oas.orgAndSync();
 //        te.execute( () -> oas.orgAndSync());
         return "Done";
     }

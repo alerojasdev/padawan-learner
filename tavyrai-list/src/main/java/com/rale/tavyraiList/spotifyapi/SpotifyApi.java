@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
-
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -180,11 +179,8 @@ public class SpotifyApi {
         return null;
     }
     public void insertMusic(String playlistId, List<String> tracksUri){
-
         insertMusicInternal(playlistId, tracksUri);
     }
-
-
 
     private void insertMusicInternal(String playlistID, List<String> tracksUri){
         String resourceUri = "/playlists/{playlistId}/tracks";
@@ -291,11 +287,4 @@ public class SpotifyApi {
             throw new RuntimeException(e);
         }
     }
-
-    public void insertMusicIntoNewPlaylist(String playlistName, String playlistDesc, List<String> songIds) {
-        String id = createPlaylist(playlistName, playlistDesc);
-        insertMusic(id, songIds);
-    }
 }
-
-

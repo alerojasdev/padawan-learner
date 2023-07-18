@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
-
 @Component
 public class OrganizeAndSynchronize {
     @Autowired
@@ -17,7 +16,6 @@ public class OrganizeAndSynchronize {
     ShazamApi shazamApi;
     @Autowired
     TextAnalysisApi textAnalysisApi;
-
     public void orgAndSync() {
         System.out.println("OrganizeAndSyncronize.orgAndSync()");
 
@@ -26,127 +24,78 @@ public class OrganizeAndSynchronize {
         Map<String, String> playlistId_name = userPlayList.stream().collect(Collectors.toMap(i -> i.id, i -> i.name));
         System.out.println("ids y nombres de playlists: "+ playlistId_name);
 
-        // 1. todo esto no funciona.
-        System.out.println("2. Borrar playlists q comienzan con tl_ *");
-        playlistId_name.values().stream()
-                .filter(i->i.startsWith("tavyraiList_"))
-                .toList().forEach(i -> spotifyApi.deletePlaylist(i));
+//        // 1. todo esto no funciona.
+//        System.out.println("2. Borrar playlists q comienzan con tl_ *");
+//        playlistId_name.values().stream()
+//                .filter(i->i.startsWith("tavyraiList_"))
+//                .toList().forEach(i -> spotifyApi.deletePlaylist(i));
 
         List<SpotifyMusic> musicsFromSpotifyPlaylist = getSongsFromPlaylistsAndLiked(playlistId_name);
-
         fillInLanguageAndReleaseDates(musicsFromSpotifyPlaylist);
+        List<String> languageAmount = getAmountOfMusicsByLanguage(musicsFromSpotifyPlaylist, 20);
+        createPlaylistAndInsertSortedMusics(musicsFromSpotifyPlaylist, languageAmount);
 
+        // todo
+        // las listas tienen nombre dinamico por idioma en base a un prefijo tl_idioma
+        // crear las playlist segun idioma y release date con sortSongs()
         // encontrar idiomas que tienen mas de 20 musicas en ese idioma
-
-//        System.out.println("5. separar las musicas por lenguajes y ordenarlos en playslist");
-//        List<String> playlistByEn = new ArrayList<>();
-//        List<String> playlistByEs = new ArrayList<>();
-//        List<String> playlistByOthersLanguages = new ArrayList<>();
-//        List<String> playlistByReleaseDate = new ArrayList<>();
-//        sortSongs(musicsFromSpotifyPlaylist, playlistByEn, playlistByEs, playlistByOthersLanguages, playlistByReleaseDate);
-//
-//
-//        System.out.println("6. crear playlists con los idiomas encontrados y playlist de releaseDate");
-//        spotifyApi.insertMusicIntoNewPlaylist("tavyraiList_EN", "playlist en ingles", playlistByEn);
-//        spotifyApi.insertMusicIntoNewPlaylist("tavyraiList_ES", "playlist en espanol", playlistByEs);
-//        spotifyApi.insertMusicIntoNewPlaylist("tavyraiList_OTHERS_L", "playlist en otros idiomas", playlistByOthersLanguages);
-//        spotifyApi.insertMusicIntoNewPlaylist("tavyraiList_byReleaseDate", "playlist por ano de lanzamiento", playlistByReleaseDate);
-
         // - SI se encuentra una playlist con el mismo nombre eliminar su contenido
         // - crear cache con un archivo
     }
-
-    private static void insertMusicsInPlaylsits(List<SpotifyMusic> musicsFromSpotifyPlaylist, List<String> languagesFound) {
-
-//        List<String> playlisLantUris = null;
-//
-//        SpotifyApi spotifyApi1 = null;
-//
-//        for (String e : languagesFound){
-//            for (SpotifyMusic spotifyMusic : musicsFromSpotifyPlaylist){
-//                if (e == spotifyMusic.language){
-//                    playlisLantUris.add(spotifyMusic.spotifyMusicUri);
-//                }
-//            }
-//            spotifyApi1.insertMusicIntoNewPlaylist("tl_"+ e, "playlist by " + e, playlisLantUris);
-//            playlisLantUris.clear();
-//        }
-
-//        List<String> playlistReleaseUris = null;
-//
-//
-//        for (String e : languagesFound){
-//            for (SpotifyMusic spotifyMusic : musicsFromSpotifyPlaylist){
-//                if (e != spotifyMusic.language){
-//                    playlistReleaseUris.add(spotifyMusic.spotifyMusicUri);
-//                }
-//            }
-//            spotifyApi1.insertMusicIntoNewPlaylist("tl_"+ e, "playlist by " + e, playlistReleaseUris);
-//            playlistReleaseUris.clear();
-//        }
-
-    }
-
-    public static void main(String[] args) {
-
-//        OrganizeAndSynchronize organizeAndSynchronize = new OrganizeAndSynchronize();
-//
-//        List<SpotifyMusic> musicsFromSpotifyPlaylist = new ArrayList<>();
-//
-//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("es"));
-//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("es"));
-//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("es"));
-//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("es"));
-//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("en"));
-//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("en"));
-//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("en"));
-//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("de"));
-//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("fr"));
-//        musicsFromSpotifyPlaylist.add(new SpotifyMusic("pr"));
-//
-//        List<List<String>> groupped = organizeAndSynchronize.groupByLangWithCount(musicsFromSpotifyPlaylist, 2);
-//
-//        for (List<String> a : groupped){
-//            System.out.println(a.toString());
-//        }
-
-    }
-
-    private List<List<String>> groupByLangWithCount(List<SpotifyMusic> musicsFromSpotifyPlaylist, int threshold) {
-
-        // todo
-        // crear las playlist segun idioma y release date con sortSongs()
-        // las listas tienen nombre dinamico por idioma en base a un prefijo tl_idioma
-        // ponemos los lenguages encontrados en una lista
-
-        Map<String, Integer> languageCountMap = new HashMap<>();
-
-        for (SpotifyMusic music : musicsFromSpotifyPlaylist) {
-            String language = music.language;
-            languageCountMap.put(language, languageCountMap.getOrDefault(language, 0) + 1);
-        }
-
-        List<List<String>> result = new ArrayList<>();
-        List<String> currentList = new ArrayList<>();
-
-        // Create separate lists for each language that appears equal to or more than the given number
-        for (SpotifyMusic music : musicsFromSpotifyPlaylist) {
-            String language = music.language;
-            if (languageCountMap.get(language) >= threshold) {
-                currentList.add(music.spotifyMusicUri);
+    private List<String> getAmountOfMusicsByLanguage(List<SpotifyMusic> musicsFromSpotifyPlaylist, int threshold) {
+        // Amount Of Musics By Language
+        Map<String, Integer> langsAndTimes = new HashMap<>();
+        for (SpotifyMusic spotifyMusic : musicsFromSpotifyPlaylist){
+            if (!langsAndTimes.containsKey(spotifyMusic.language)){
+                langsAndTimes.put(spotifyMusic.language, 1);
             } else {
-                if (!currentList.isEmpty()) {
-                    result.add(currentList);
-                    currentList = new ArrayList<>();
-                }
+                langsAndTimes.replace(spotifyMusic.language, langsAndTimes.get(spotifyMusic.language), langsAndTimes.get(spotifyMusic.language) + 1);
             }
         }
-
-        if (!currentList.isEmpty()) {
-            result.add(currentList);
+        List<String> result = new ArrayList<>();
+        for (Map.Entry<String, Integer> map : langsAndTimes.entrySet()){
+            if (map.getValue() >= threshold){
+                result.add(map.getKey());
+            }
         }
         return result;
     }
+    private void createPlaylistAndInsertSortedMusics(List<SpotifyMusic> musicsFromSpotifyPlaylist, List<String> languageAmount) {
+
+        // idioma/listadeURLs
+        Map<String, List<String>> lang_ListOfSongUri = new HashMap<>();
+        for (SpotifyMusic spotifyMusic : musicsFromSpotifyPlaylist) {
+            String idioma = spotifyMusic.language;
+            String musicUri = spotifyMusic.spotifyMusicUri;
+            if (languageAmount.contains(spotifyMusic.language)) {
+                lang_ListOfSongUri.computeIfAbsent(idioma, k -> new ArrayList<>()).add(musicUri);
+            } else {
+                musicUri = spotifyMusic.spotifyMusicUri;
+                lang_ListOfSongUri.computeIfAbsent("Others", k -> new ArrayList<>()).add(musicUri);
+            }
+        }
+
+        //replace language for playlist id
+        Map<String, List<String>> modifiedMap = new HashMap<>();
+        for (Map.Entry<String, List<String>> entry : lang_ListOfSongUri.entrySet()){
+
+            String oldKey = entry.getKey();
+            List<String> value = entry.getValue();
+
+            String newKey = spotifyApi.createPlaylist("tl_" + entry.getKey(), "Playlist ordered by " + entry.getKey());
+
+            modifiedMap.put(newKey, value);
+            System.out.println("Creating playlist.......");
+
+        }
+
+        for (Map.Entry<String, List<String>> entry : modifiedMap.entrySet()){
+            spotifyApi.insertMusic(entry.getKey(), entry.getValue());
+            System.out.println("Inserting musics in playlist.......");
+        }
+    }
+
+
 
     private void fillInLanguageAndReleaseDates(List<SpotifyMusic> musicsFromSpotifyPlaylist) {
         System.out.println("4. buscar letras y release en shazam ** xx, 1900");
@@ -164,12 +113,10 @@ public class OrganizeAndSynchronize {
             spotifyMusic.language = lan;
             spotifyMusic.releaseDate = songMetaData.getReleaseDate();
             spotifyMusic.lyrics = songMetaData.lyrics;
-            System.out.println("full song info " + spotifyMusic);
-
+            System.out.println();
+            System.out.println(spotifyMusic.title + " " + spotifyMusic.releaseDate + " " + spotifyMusic.language);
         }
-
     }
-
     private List<SpotifyMusic> getSongsFromPlaylistsAndLiked(Map<String, String> playlistId_name) {
         List<SpotifyMusic> musicsFromSpotifyPlaylist = new ArrayList<>();
         System.out.println("3. id de musicas en playlists encontrados - nombre y artista de musica de spotify");
@@ -183,38 +130,13 @@ public class OrganizeAndSynchronize {
         System.out.println("lista de musicas de los playlists encontrados"+ musicsFromSpotifyPlaylist);
         return musicsFromSpotifyPlaylist;
     }
-
     private static void sortSongs(List<SpotifyMusic> musicsFromSpotifyPlaylist, List<String> languagesFound, List<String> playlistByReleaseDate) {
-            musicsFromSpotifyPlaylist.sort(new Comparator<SpotifyMusic>() {
+        musicsFromSpotifyPlaylist.sort(new Comparator<SpotifyMusic>() {
             public int compare(SpotifyMusic o1, SpotifyMusic o2) {
                 return o2.releaseDate - o1.releaseDate;
             }
         });
-
-
-//        for (SpotifyMusic spotifyMusic : musicsFromSpotifyPlaylist){
-//            if (spotifyMusic.language.equals("es")){
-//                playlistByEs.add(spotifyMusic.stotifyMusicUri);
-//            }
-//
-//            if (spotifyMusic.language.equals("en")){
-//                playlistByEn.add(spotifyMusic.stotifyMusicUri);
-//            }
-//
-//            if (!spotifyMusic.language.equals("es") && !spotifyMusic.language.equals("en")){
-//                playlistByOthersLanguages.add(spotifyMusic.stotifyMusicUri);
-//            }
-//
-//            playlistByReleaseDate.add(spotifyMusic.stotifyMusicUri);
-//
-//        }
-
-        for (SpotifyMusic spotifyMusic : musicsFromSpotifyPlaylist)
-        {
-            System.out.println("RELEASE DATE = " + spotifyMusic.releaseDate);
-        }
     }
-
     private static class SpotifyMusic{
         String spotifyMusicUri;
         String title;
@@ -222,7 +144,6 @@ public class OrganizeAndSynchronize {
         String lyrics;
         int releaseDate;
         String language;
-
         public SpotifyMusic(String idioma) {
             language = idioma;
         }
@@ -231,7 +152,6 @@ public class OrganizeAndSynchronize {
             this.title = track.name;
             this.artistNames = track.artists.stream().map(artist-> artist.name).collect(Collectors.joining(" "));
         }
-
         private String getShortLyrics() {
             if (lyrics == null)
                 return "null";
@@ -250,5 +170,7 @@ public class OrganizeAndSynchronize {
         }
     }
 }
+
+
 
 
