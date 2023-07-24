@@ -171,47 +171,106 @@ public class SpotifyApi {
         }
         return null;
     }
-    public void insertMusic(String playlistId, List<String> tracksUri){
-        insertMusicInternal(playlistId, tracksUri);
-    }
-    private void insertMusicInternal(String playlistID, List<String> tracksUri){
-        String resourceUri = "/playlists/{playlistId}/tracks";
-        StringBuilder tracksUriToSend = new StringBuilder();
-        boolean firstTime = true;
-        for (String t: tracksUri){
-            if (!firstTime){
-                tracksUriToSend.append(",");
+    public void insertMusic(String playlistId, List<String> tracksURI){
+        boolean isMoreToInsert = true;
+        int offset = 0;
+        int upTo = 100;
+        while(isMoreToInsert){
+            if(tracksURI.size()-offset<=100){
+                isMoreToInsert = false;
+                upTo=tracksURI.size();
             }
-            firstTime = false;
-            tracksUriToSend.append("\"");
-            tracksUriToSend.append(t);
-            tracksUriToSend.append("\"");
+            List<String> tracksToInsert = new ArrayList<>();
+            for(int i=offset; i<upTo; i++){
+                tracksToInsert.add(tracksURI.get(i));
+            }
+            insertMusicInternal(playlistId, tracksToInsert, offset);
+            upTo = upTo + 100;
+            offset = offset + 100;
         }
-        String bodyContent = String.format("""
-                {
-                    "uris": [%s],
-                    "position": 0
-                }
-                """, tracksUriToSend
+    }
+    private void insertMusicInternal(String playlistId, List<String> tracksURI, int position){
+        System.out.println("esta es la lista de uris to insert" + Arrays.toString(tracksURI.toArray()));
+        String resourceUri = "/playlists/{playlistId}/tracks";
+
+        Map map = Map.of(
+                "uris", tracksURI,
+                "position", position
         );
-        System.out.println(bodyContent);
-        String bodyContentRequest = webClient
+        String s = "";
+        try{
+            s = new ObjectMapper().writeValueAsString(map);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        String body = webClient
                 .post()
                 .uri(uf->
                         uf.path(resourceUri)
-                                .build(playlistID)
+                                .build(playlistId)
                 )
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(bodyContent))
+                .body(BodyInserters.fromValue(s))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
     }
+//    private void insertMusicInternal(String playlistID, List<String> tracksUri){
+//        String resourceUri = "/playlists/{playlistId}/tracks";
+//        StringBuilder tracksUriToSend = new StringBuilder();
+//        boolean firstTime = true;
+//        for (String t: tracksUri){
+//            if (!firstTime){
+//                tracksUriToSend.append(",");
+//            }
+//            firstTime = false;
+//            tracksUriToSend.append("\"");
+//            tracksUriToSend.append(t);
+//            tracksUriToSend.append("\"");
+//        }
+//        String bodyContent = String.format("""
+//                {
+//                    "uris": [%s],
+//                    "position": 0
+//                }
+//                """, tracksUriToSend
+//        );
+//
+//        System.out.println();
+//        System.out.println("body content of uris.......................");
+//        System.out.println();
+//        System.out.println(bodyContent);
+//        System.out.println();
+//        System.out.println("body content of uris.......................");
+//        System.out.println();
+//
+//        String requestBody = webClient
+//                .post()
+//                .uri(uf->
+//                        uf.path(resourceUri)
+//                                .build(playlistID)
+//                )
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .body(BodyInserters.fromValue(bodyContent))
+//                .retrieve()
+//                .bodyToMono(String.class)
+//                .block();
+//
+//        System.out.println();
+//        System.out.println("URL OF INSERT MUSICS.......................");
+//        System.out.println();
+//        System.out.println(requestBody);
+//        System.out.println();
+//        System.out.println("URL OF INSERT MUSICS.......................");
+//        System.out.println();
+//
+//    }
     public void deletePlaylist(String playlistId){
         System.out.println("Borrando playlistId: " + playlistId);
 
         String resourceUri = "/playlists/{playlistId}/followers";
-        String bodyContent = webClient
+        webClient
                 .delete()
                 .uri(uf->
                         uf.path(resourceUri)

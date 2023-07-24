@@ -1,4 +1,4 @@
-package com.rale.bonkerlist.ralelyricsfinder;
+package com.rale.bonkerlist.lyricsfinder;
 
 import com.github.kevinsawicki.http.HttpRequest;
 import org.springframework.stereotype.Component;

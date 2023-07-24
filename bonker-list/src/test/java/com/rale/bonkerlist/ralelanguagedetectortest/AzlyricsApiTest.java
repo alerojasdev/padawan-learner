@@ -1,6 +1,6 @@
 package com.rale.bonkerlist.ralelanguagedetectortest;
 
-import com.rale.bonkerlist.ralelyricsfinder.AzlyricsApi;
+import com.rale.bonkerlist.lyricsfinder.AzlyricsApi;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

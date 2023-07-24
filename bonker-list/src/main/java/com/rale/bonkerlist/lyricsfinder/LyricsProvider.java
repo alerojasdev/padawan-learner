@@ -1,4 +1,4 @@
-package com.rale.bonkerlist.ralelyricsfinder;
+package com.rale.bonkerlist.lyricsfinder;
 
 public interface LyricsProvider {
     String fetchLyrics(String songName);

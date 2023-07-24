@@ -1,4 +1,4 @@
-package com.rale.bonkerlist.ralelanguagedetector;
+package com.rale.bonkerlist.languagedetector;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
