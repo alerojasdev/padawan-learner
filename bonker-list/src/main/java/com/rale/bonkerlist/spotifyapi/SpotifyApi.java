@@ -190,9 +190,7 @@ public class SpotifyApi {
         }
     }
     private void insertMusicInternal(String playlistId, List<String> tracksURI, int position){
-        System.out.println("esta es la lista de uris to insert" + Arrays.toString(tracksURI.toArray()));
         String resourceUri = "/playlists/{playlistId}/tracks";
-
         Map map = Map.of(
                 "uris", tracksURI,
                 "position", position
@@ -203,7 +201,6 @@ public class SpotifyApi {
         }catch (Exception e){
             e.printStackTrace();
         }
-
         String body = webClient
                 .post()
                 .uri(uf->
@@ -216,56 +213,6 @@ public class SpotifyApi {
                 .bodyToMono(String.class)
                 .block();
     }
-//    private void insertMusicInternal(String playlistID, List<String> tracksUri){
-//        String resourceUri = "/playlists/{playlistId}/tracks";
-//        StringBuilder tracksUriToSend = new StringBuilder();
-//        boolean firstTime = true;
-//        for (String t: tracksUri){
-//            if (!firstTime){
-//                tracksUriToSend.append(",");
-//            }
-//            firstTime = false;
-//            tracksUriToSend.append("\"");
-//            tracksUriToSend.append(t);
-//            tracksUriToSend.append("\"");
-//        }
-//        String bodyContent = String.format("""
-//                {
-//                    "uris": [%s],
-//                    "position": 0
-//                }
-//                """, tracksUriToSend
-//        );
-//
-//        System.out.println();
-//        System.out.println("body content of uris.......................");
-//        System.out.println();
-//        System.out.println(bodyContent);
-//        System.out.println();
-//        System.out.println("body content of uris.......................");
-//        System.out.println();
-//
-//        String requestBody = webClient
-//                .post()
-//                .uri(uf->
-//                        uf.path(resourceUri)
-//                                .build(playlistID)
-//                )
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(BodyInserters.fromValue(bodyContent))
-//                .retrieve()
-//                .bodyToMono(String.class)
-//                .block();
-//
-//        System.out.println();
-//        System.out.println("URL OF INSERT MUSICS.......................");
-//        System.out.println();
-//        System.out.println(requestBody);
-//        System.out.println();
-//        System.out.println("URL OF INSERT MUSICS.......................");
-//        System.out.println();
-//
-//    }
     public void deletePlaylist(String playlistId){
         System.out.println("Borrando playlistId: " + playlistId);
 
@@ -288,7 +235,6 @@ public class SpotifyApi {
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
-
         String pattern = "\"id\"\\s*:\\s*\"([^\"]+)\"";
         Pattern reggex = Pattern.compile(pattern);
         Matcher matcher = reggex.matcher(bodyContent);

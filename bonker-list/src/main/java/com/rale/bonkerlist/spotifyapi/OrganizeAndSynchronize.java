@@ -93,7 +93,6 @@ public class OrganizeAndSynchronize {
         System.out.println();
         for (SpotifyMusic spotifyMusic: musicsFromSpotifyPlaylist){
             try { Thread.sleep(1000L); } catch (Exception e) {}
-            // 3. TODO hacer que getmetadata no retorne null nunca
             ShazamApi.ShazamMetadata songMetaData = shazamApi.getMetadata(spotifyMusic.title +" " +spotifyMusic.artistNames);
             if (songMetaData == null) {
                 spotifyMusic.lyrics = "notLyricsFound";
