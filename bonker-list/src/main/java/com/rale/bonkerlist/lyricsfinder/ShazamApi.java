@@ -34,11 +34,11 @@ public class ShazamApi implements LyricsProvider{
             ShazamMetadata sm = extractRelevantData(responseLyrics);
             return sm;
         } catch (Exception e) {
-            System.out.println("Problema obteniendo metadatos de shazam para: " + songName);
+            System.out.println();
+            System.out.println("Find some issues obtaining metadata from shazam for: " + songName);
         }
         System.out.println();
         System.out.println("Required meta data for " + songName + " filled with default values ........");
-        System.out.println();
             ShazamMetadata shazamMetadata = new ShazamMetadata();
             shazamMetadata.lyrics = "notLyricsFound";
             shazamMetadata.releaseDate = 123;

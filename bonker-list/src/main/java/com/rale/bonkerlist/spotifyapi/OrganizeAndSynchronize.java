@@ -1,7 +1,8 @@
 package com.rale.bonkerlist.spotifyapi;
-
 import com.rale.bonkerlist.languagedetector.TextAnalysisApi;
 import com.rale.bonkerlist.lyricsfinder.ShazamApi;
+import com.rale.bonkerlist.repository.dao.SongsMetricsImpl;
+import com.rale.bonkerlist.repository.entity.SongsMetrics;
 import com.rale.bonkerlist.spotifyapi.dto.ItemFromPlaylist;
 import com.rale.bonkerlist.spotifyapi.dto.SpotifyMusic;
 import com.rale.bonkerlist.spotifyapi.dto.Track;
@@ -17,6 +18,8 @@ public class OrganizeAndSynchronize {
     ShazamApi shazamApi;
     @Autowired
     TextAnalysisApi textAnalysisApi;
+    @Autowired
+    SongsMetricsImpl songsRepo;
     public void orgAndSync() {
         List<ItemFromPlaylist> userPlayList = spotifyApi.getUserPlayList();
         Map<String, String> playlist_Id_name = userPlayList.stream().collect(Collectors.toMap(i -> i.id, i -> i.name));
@@ -27,10 +30,12 @@ public class OrganizeAndSynchronize {
             }
         }
         List<SpotifyMusic> musicsFromSpotifyPlaylist = getSongsFromPlaylistsAndLiked(playlist_Id_name);
+
         fillInLanguageAndReleaseDates(musicsFromSpotifyPlaylist);
         List<String> languageAmount = getAmountOfMusicsByLanguage(musicsFromSpotifyPlaylist, 20);
         createPlaylistAndInsertSongsByLan(musicsFromSpotifyPlaylist, languageAmount);
         createPlaylistAndInsertSongsByReleaseDate(musicsFromSpotifyPlaylist);
+
     }
     private void createPlaylistAndInsertSongsByReleaseDate(List<SpotifyMusic> musicsFromSpotifyPlaylist) {
         sortSongsByReleaseDate(musicsFromSpotifyPlaylist);
@@ -86,11 +91,18 @@ public class OrganizeAndSynchronize {
         }
         return result;
     }
-
     private void fillInLanguageAndReleaseDates(List<SpotifyMusic> musicsFromSpotifyPlaylist) {
         System.out.println();
         System.out.println("4. buscar letras y release en shazam ** xx, 1900");
         System.out.println();
+
+        // fill language and release date song data from database
+        // list of songs whose data is not necessary to search
+        List<SpotifyMusic> filterListOfSongs = consultDataBaseForSongData(musicsFromSpotifyPlaylist);
+
+        // search only those songs that do not have metadata
+        musicsFromSpotifyPlaylist.removeAll(filterListOfSongs);
+
         for (SpotifyMusic spotifyMusic: musicsFromSpotifyPlaylist){
             try { Thread.sleep(1000L); } catch (Exception e) {}
             ShazamApi.ShazamMetadata songMetaData = shazamApi.getMetadata(spotifyMusic.title +" " +spotifyMusic.artistNames);
@@ -104,10 +116,35 @@ public class OrganizeAndSynchronize {
             spotifyMusic.language = lan;
             spotifyMusic.releaseDate = songMetaData.getReleaseDate();
             spotifyMusic.lyrics = songMetaData.lyrics;
+
             System.out.println();
-            System.out.println(spotifyMusic.title + " / by / " + spotifyMusic.artistNames + " " + spotifyMusic.releaseDate + " " + spotifyMusic.language);
+            System.out.println("Name = " + spotifyMusic.title + " / by = " + spotifyMusic.artistNames + " / release date = " + spotifyMusic.releaseDate + " / language = " + spotifyMusic.language);
         }
+        for (SpotifyMusic spotifyMusic : musicsFromSpotifyPlaylist){
+            songsRepo.saveSong(new SongsMetrics(spotifyMusic.spotifyMusicUri, spotifyMusic.language, spotifyMusic.releaseDate, spotifyMusic.lyrics, spotifyMusic.artistNames, spotifyMusic.title));
+        }
+        musicsFromSpotifyPlaylist.addAll(filterListOfSongs);
     }
+
+    private List<SpotifyMusic> consultDataBaseForSongData(List<SpotifyMusic> musicsFromSpotifyPlaylist) {
+        List<SpotifyMusic> songListFromDataBase = new ArrayList<>();
+        List<SongsMetrics> songsRepoList;
+        songsRepoList = songsRepo.findSong();
+        for (SpotifyMusic spotifyMusic: musicsFromSpotifyPlaylist){
+            for (SongsMetrics songsMetrics : songsRepoList){
+                if (spotifyMusic.spotifyMusicUri.equals(songsMetrics.getSpotify_id())){
+                    spotifyMusic.language = songsMetrics.getLanguage();
+                    spotifyMusic.releaseDate = songsMetrics.getRelease_date();
+                    songListFromDataBase.add(spotifyMusic);
+                    System.out.println();
+                    System.out.println("Found song Metadata for " + spotifyMusic.title + " / by " + spotifyMusic.artistNames + " in Database.........");
+                    System.out.println();
+                }
+            }
+        }
+        return songListFromDataBase;
+    }
+
     private List<SpotifyMusic> getSongsFromPlaylistsAndLiked(Map<String, String> playlistId_name) {
         List<SpotifyMusic> musicsFromSpotifyPlaylist = new ArrayList<>();
         System.out.println("3. id de musicas en playlists encontrados - nombre y artista de musica de spotify");
