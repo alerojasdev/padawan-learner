@@ -49,17 +49,19 @@ public class Track {
                 ", uri='" + uri + '\'' +
                 '}';
     }
-
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Track track = (Track) o;
-        return Objects.equals(id, track.id);
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Track other = (Track) obj;
+        return Objects.equals(name, other.name) &&
+                Objects.equals(uri, other.uri) &&
+                Objects.equals(type, other.type) &&
+                Objects.equals(preview_url, other.preview_url);
     }
-
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(name, uri, type, preview_url);
     }
+
 }

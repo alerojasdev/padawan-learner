@@ -26,6 +26,12 @@
     .hidden {
       display: none;
     } 
+    .modal-dialog-centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
     .lists-wraper {
       background-color: #00172c;
       border-radius: 0.5rem;
@@ -175,33 +181,6 @@
           <div class="col-md-6 mb-4">
             <div class="list-container rounded-5">
               <h6 class="mb-3">List Local Music</h6>
-              <ul class="list-group">
-                <li class="list-group-item d-flex align-items-center">
-                  <i class="bi bi-play me-2" alt="Play"></i>
-                  <i class="bi bi-music-note me-2" alt="Music Note"></i>
-                  Song 1 - Artist 1
-                </li>
-                <li class="list-group-item d-flex align-items-center">
-                  <i class="bi bi-play me-2" alt="Play"></i>
-                  <i class="bi bi-music-note me-2" alt="Music Note"></i>
-                  Song 2 - Artist 2
-                </li>
-                <li class="list-group-item d-flex align-items-center">
-                  <i class="bi bi-play me-2" alt="Play"></i>
-                  <i class="bi bi-music-note me-2" alt="Music Note"></i>
-                  Song 3 - Artist 3
-                </li>
-                <li class="list-group-item d-flex align-items-center">
-                  <i class="bi bi-play me-2" alt="Play"></i>
-                  <i class="bi bi-music-note me-2" alt="Music Note"></i>
-                  Song 4 - Artist 4
-                </li>
-                <li class="list-group-item d-flex align-items-center">
-                  <i class="bi bi-play me-2" alt="Play"></i>
-                  <i class="bi bi-music-note me-2" alt="Music Note"></i>
-                  Song 5 - Artist 5
-                </li>
-              </ul>
               <div class="d-flex flex-column align-items-center">
                 <button type="button" class="btn btn-sm mt-3 rounded-5" data-bs-toggle="modal" data-bs-target="#modal1">Upload local music</button>
               </div>
@@ -209,6 +188,7 @@
           </div>
         </div>
       </div>
+      <div id="metadataDiv"></div>
 
       <footer class="footer">
         <div class="container">
@@ -224,8 +204,9 @@
     </div>
   </div>
 
+
 <div class="modal fade" id="modal1" tabindex="-1" aria-labelledby="modal1Label" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modal1Label">Modal 1</h5>
@@ -233,19 +214,54 @@
       </div>
       <div class="modal-body">
         <div class="mb-3">
-          <label for="fileInput" class="form-label">Select file:</label>
-          <input type="file" class="form-control" id="fileInput" multiple>
+          <label for="fileInput" class="form-label">Select audio files:</label>
+          <input type="file" class="form-control" id="fileInput" multiple accept=".mp3, .wav, .ogg">
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <form action="http://localhost:8080/upload" method="POST">
+          <button type="submit" class="btn btn-primary" onclick="uploadFiles()">Upload</button> <!-- Add the onclick attribute -->
+        </form>
+        
       </div>
     </div>
   </div>
 </div>
 
   <script>
+
+
+function getCsrfToken() {
+  const cookieValue = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('sp_sso_csrf_token='))
+    .split('=')[1];
+
+  return decodeURIComponent(cookieValue);
+}
+
+function uploadFiles() {
+  const fileInput = document.getElementById("fileInput");
+  const formData = new FormData();
+
+  for (let i = 0; i < fileInput.files.length; i++) {
+    formData.append("files", fileInput.files[i]);
+  }
+
+  fetch("/upload", {
+    method: "POST",
+    body: formData,
+    headers: {
+      "X-XSRF-TOKEN": getCsrfToken(), // Add the CSRF token to the request headers
+    },
+  })
+    .then((response) => response.json())
+    .then((metadataList) => displayMetadata(metadataList))
+    .catch((error) => console.error("Error uploading files:", error));
+}
+
+
     function startLoading() {
       const button = document.getElementById("myButton");
       const link = document.getElementById("orgLink");
@@ -264,7 +280,21 @@
       }, 10000); 
     }
   }
-    </script>
+
+    function displayMetadata(metadataList) {
+      const metadataDiv = document.getElementById("metadataDiv");
+      metadataDiv.innerHTML = "";
+
+      const metadataListUl = document.createElement("ul");
+      metadataDiv.appendChild(metadataListUl);
+
+      for (const metadata of metadataList) {
+        const listItem = document.createElement("li");
+        listItem.textContent = metadata;
+        metadataListUl.appendChild(listItem);
+      }
+    }
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
