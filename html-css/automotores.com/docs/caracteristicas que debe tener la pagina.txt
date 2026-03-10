@@ -1,0 +1,7 @@
+opacidad y transparencia
+animciones css
+diseño responsivo
+boostrap
+carrusel de imagenes y popovers
+sitema de grilla de boostrap
+tarjetas boostrap

@@ -1,0 +1,153 @@
+
+*{
+    margin: 0;
+}
+body{
+    background-color: rgb(247, 247, 247);
+}
+.header{
+    align-items: center;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background-color: rgb(247, 247, 247);
+}
+img{
+    height: 70px;
+    width: 70px;
+    margin: 1.5rem;
+}
+.container{
+    width: 70%;
+    display: flex;
+    margin: auto;
+}
+.icon{
+    display: flex;
+    margin: 0 0 1em 0;
+}
+.grid{
+    display: flex;
+}
+a{
+    text-decoration: none;
+    margin: 0 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+    text-transform: uppercase;
+    color: brown;
+}
+h2{
+    font-family: Arial, Helvetica, sans-serif;
+}
+h1{
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: x-large;
+}
+.cards-container{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+.cards{
+    display: flex;
+    justify-items: center;
+    flex-direction: column;
+    background-color: rgb(247, 247, 247);
+    margin: 3rem;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    border-radius: 5px;
+}
+ul{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 0 1em 0 1em;
+    margin: auto;
+    list-style: none;
+}
+li{
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 0 0 0.5em 0;
+}
+.titles{
+    text-transform: uppercase;
+    display: flex;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    font: bolder;
+    font-size: 1em;
+    padding: 7px 5px;
+    background-color: rgb(207, 207, 207);
+    justify-content: center;
+}
+h3{
+    margin: 1em 0 1em 0;
+    padding: 0%;
+    text-transform: uppercase;
+    text-align: center;
+}
+.products{
+    text-align: center;
+}
+
+.form{
+    display: flex;
+    justify-content: center;
+}
+.submitenviar{
+    display: flex;
+    justify-content: center;
+    padding: 18px;
+}
+.navbar{
+    display: flex;
+    justify-content: flex-end;
+}
+.send{
+    background-color: yellow;
+    padding: 0.5rem;
+    border-color: black;
+    border-style: solid;
+    border-radius: 5px;
+}
+.btn{
+    margin: 1em;
+    background-color: yellow;
+    padding: 0.5rem;
+    border-style: none;
+    font-weight: 900;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 5px;
+    width: 4rem;
+}
+.video{
+    margin: 2rem;
+    display: flex;
+    justify-content: center;
+}
+.main-container{
+    margin-top: 10rem;
+}
+.btn-container{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+}
+@media (max-width:"1000px") {
+    .cards-container{
+        display: block;
+        justify-content: left;
+    }
+    .cards{
+        margin: 0;
+        padding: 0;
+    }
+}

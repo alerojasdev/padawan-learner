@@ -1,0 +1,201 @@
+*{
+    margin: 0;
+}
+.logo-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 140px;
+    height: 60px;
+    margin: 0.5em;
+    margin-left: 2em;
+}
+.header-menu{
+    display: flex;
+    flex-direction: column;
+    background-color: #9ee7ff;
+    width: 100%;
+    height: 5em;
+}
+.navbar-social-media{
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.intro-presentacion{
+    width: 100%;
+    height: 600px;
+}
+.intro-presentacion{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+h1{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 200%;
+    color: black;
+}
+.btn-intro{
+    width: fit-content;
+    margin: 2em;
+    padding: 0.5em;
+    border: 3px solid rgb(24, 23, 104);
+    border-bottom: 10px solid  rgb(24, 23, 104);
+    border-radius: 10px;
+}
+.btn-intro{
+    text-decoration: none;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 1.3em;
+    font-style: normal;
+    font-weight: bold;
+}
+.title-intro{
+    margin-top: 2em;
+}
+.btn-intro-container{
+    margin-top: 2em;
+}
+.fondo-intro{
+    margin: 3em 6em 2em 3em;
+    max-width: 1253px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    opacity: 60%;
+}
+.servicios-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+}
+.servicios-de-calidad{
+    background-color: cyan;
+    margin-top: 3em;
+    width: 100%;
+    height: 40em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+h2{
+    margin-top: 1em;
+    margin-bottom: 2em;
+    font-family: "Audiowide", sans-serif;
+    font-size: 250%;
+}
+.cards-servicios{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 300px;
+    height: 400px;
+    background-color: white;
+    border-radius: 40px 40px 40px 40px;
+}
+.img-servicios{
+    margin: 1em;
+    max-width: 300px;
+    max-height: 300px;
+}
+.parrafo{
+    height: 2em;
+    text-align: center;
+    text-justify: center;
+    padding: 1em;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 130%;
+    background-color: rgb(253, 200, 131);
+    border-radius: 0px 0px 40px 40px;
+}
+.cards-servicios :hover{
+    opacity: 30%;
+    cursor: pointer;
+}
+.nav-link :hover{
+    opacity: 20%;
+}
+.navlink-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 5em;
+}
+.contacto{
+    padding: 3em;
+    display: flex;
+    background-color: lavender;
+}
+.form{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+.info-contact{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 3em;
+    margin-left: 9em;
+}
+#navlink{
+    size: 500px;
+    margin-left: 3em;
+}
+.social-icons{
+    width: 30px;
+    height: 30px;
+}
+.navbar-menu{
+    display: flex;
+    justify-content: center;
+    background-color: #00bfff;
+}
+.nav-link{
+    color: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 130%;
+    text-decoration: none;
+    text-transform: uppercase;
+    margin: 1em;
+}
+.navlink-w{
+    margin: 0.7em;
+}
+.info-text{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 120%;
+}
+label{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 120%;
+}
+.nfs-info-logo{
+    font-family: "Audiowide", sans-serif;
+    font-size: 120%;
+}
+.btn-enviar{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 120%;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    margin: auto;
+}
+.mensajes-contacto{
+    display: flex;
+    width: 100%;
+}
+.mensajes-con-contenedor{
+    margin: 2em 2em 0 0;
+}
